@@ -8,6 +8,6 @@ Gem::Specification.new do |s|
   s.description = 'Much longer explanation of the example!'
   s.authors     = ['Stewart Nguyen']
   s.email       = 'cuongkb3g@gmail.com'
-  s.files       = ['lib/a_simple_favor.rb']
-  s.homepage    = 'https://rubygems.org/gems/a_simple_favor'
+  s.files       = ['lib/duckery.rb', 'lib/configuration.rb']
+  s.homepage    = 'https://rubygems.org/gems/duckery'
 end
