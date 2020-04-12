@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require 'configuration'
+
 module Duckery
   def self.prepended(base)
     base.singleton_class.prepend(@class_methods_module)
@@ -14,10 +18,12 @@ module Duckery
 
     @class_methods_module = Module.new do
       Duckery.configuration.variants.each do |variant|
-        Duckery.variants_count[variant] = []
-
         define_method variant do |*args|
-          Duckery.variants_count[variant].push(name) # Roll call
+          Duckery.statistic[name] ||= { variants: [] }
+
+          return unless defined?(super)
+
+          Duckery.statistic[name][:variants].push(variant) # Roll call
 
           super(*args)
         end
@@ -29,7 +35,7 @@ module Duckery
     @configuration = Duckery::Configuration.new
   end
 
-  def self.variants_count
-    @variants_count ||= {}
+  def self.statistic
+    @statistic ||= {}
   end
 end
