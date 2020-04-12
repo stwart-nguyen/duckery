@@ -10,4 +10,6 @@ Gem::Specification.new do |s|
   s.email       = 'cuongkb3g@gmail.com'
   s.files       = ['lib/duckery.rb', 'lib/configuration.rb']
   s.homepage    = 'https://rubygems.org/gems/duckery'
+  s.executables << 'duckery'
+  s.add_runtime_dependency 'require_all', '~> 3.0.0'
 end

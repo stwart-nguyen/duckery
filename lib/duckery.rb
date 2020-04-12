@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'configuration'
+require 'duckery/railtie' if defined?(Rails)
 
 module Duckery
   def self.prepended(base)
