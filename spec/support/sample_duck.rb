@@ -1,0 +1,1 @@
+class SampleDuck; end

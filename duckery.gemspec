@@ -12,4 +12,5 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://rubygems.org/gems/duckery'
   s.executables << 'duckery'
   s.add_runtime_dependency 'require_all', '~> 3.0.0'
+  s.add_development_dependency 'rspec'
 end
