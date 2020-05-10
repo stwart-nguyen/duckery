@@ -3,7 +3,6 @@
 
 require 'duckery'
 require 'require_all'
-require 'byebug'
 
 Duckery.config do |config|
   config.variants = ARGV[1].split(',').map(&:to_sym)

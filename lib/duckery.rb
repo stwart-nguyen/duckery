@@ -2,7 +2,6 @@
 
 require 'configuration'
 require 'duckery/railtie' if defined?(Rails)
-require 'byebug'
 
 module Duckery
   def self.prepended(base)
