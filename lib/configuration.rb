@@ -2,6 +2,10 @@
 
 module Duckery
   class Configuration
-    attr_accessor :variant
+    attr_writer :variants
+
+    def variants
+      @variants ||= []
+    end
   end
 end

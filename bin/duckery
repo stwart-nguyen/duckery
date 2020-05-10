@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'duckery'
+require 'require_all'
+
+Duckery.config do |config|
+  config.variants = ARGV[1].split(',').map(&:to_sym)
+end
+
+# --with-subclasses by default
+# how about module? and its nested?
+# rails
+if defined?(Rails)
+  # require '/Users/stewart/Workspace/collabs/api/config/environment'
+  # ApplicationRecord.prepend(Duckery)
+  Dir[File.join('/Users/stewart/Workspace/collabs/api/app/models', '**', '*.rb')].each do |file_name|
+    klass = file_name.split('/').last.sub('.rb', '').classify.safe_constantize
+
+    next if klass.nil? || klass.superclass != ApplicationRecord
+
+    Object.send(:remove_const, klass.name)
+    load(file_name)
+
+    missing_variants = Duckery.configuration.variants - Duckery.statistic[klass.name].fetch(:variants, [])
+
+    next if missing_variants.empty?
+
+    p "Missing `#{missing_variants.join(', ')}` for #{klass}, please add it to #{File.expand_path(file_name)}"
+  end
+else
+  existing_classes = ObjectSpace.each_object(Class).to_a
+  require_all File.join(ARGV[0], '**', '*.rb')
+
+  Dir[File.join(ARGV[0], '**', '*.rb')].each do |file_name|
+    new_classes = ObjectSpace.each_object(Class).to_a - existing_classes
+
+    new_classes.reject(&:singleton_class?).each do |klass|
+      klass.prepend(Duckery)
+
+      Duckery.configuration.variants.each do |variant|
+        klass.send(variant)
+      end
+
+      missing_variants = Duckery.configuration.variants - Duckery.statistic[klass.name].fetch(:variants, [])
+
+      next if missing_variants.empty?
+
+      p "Missing `#{missing_variants.join(', ')}` for #{klass}, please add it to #{File.expand_path(file_name)}"
+    end
+
+    existing_classes.concat(new_classes)
+  end
+end
